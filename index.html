@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tıp Fakültesi — Belge Doğrulama</title>
+
+<style>
+
+:root{
+  --blue:#3f67b0;
+  --blue-strong:#1b5fc6;
+  --muted:#666;
+  --bg:#f3f6fb;
+  --card:#ffffff;
+}
+
+/* GLOBAL */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--bg);
+  font-family:"Segoe UI",Arial,sans-serif;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* HEADER */
+header{
+  background:#fff;
+  padding:18px 40px;
+  border-bottom:1px solid #ddd;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+header img{height:70px;}
+h1{font-size:26px;font-weight:700;}
+
+/* MAIN */
+#main{
+  width:92%;
+  max-width:900px;
+  margin:40px auto;
+  background:#fff;
+  border-radius:14px;
+  padding:32px;
+  box-shadow:0 10px 35px rgba(0,0,0,0.08);
+  border:1px solid #e4e4e4;
+}
+
+.title{
+  font-size:22px;
+  font-weight:700;
+  color:var(--blue-strong);
+  margin-bottom:20px;
+}
+
+/* INPUTS */
+.input-box{
+  position:relative;
+  margin-bottom:25px;
+}
+
+input{
+  width:100%;
+  padding:14px 15px;
+  font-size:17px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  background:#fafafa;
+  transition:.3s;
+}
+input:focus{
+  border-color:var(--blue);
+  background:#fff;
+}
+
+.underline{
+  position:absolute;
+  left:0;
+  bottom:-5px;
+  width:60px;
+  height:4px;
+  background:var(--blue);
+  border-radius:3px;
+  transition:.4s;
+}
+input:focus + .underline{
+  width:100%;
+}
+
+/* BUTTON */
+button{
+  display:block;
+  margin:0 auto;
+  padding:13px 34px;
+  font-size:18px;
+  font-weight:700;
+  border-radius:25px;
+  border:0;
+  cursor:pointer;
+  background:var(--blue);
+  color:#fff;
+}
+button:hover{
+  background:var(--blue-strong);
+}
+
+/* ERRORS */
+.error{
+  color:#b00020;
+  font-weight:700;
+  margin-top:10px;
+  text-align:center;
+  display:none;
+}
+
+/* ANIMATIONS */
+.shake{animation:shake .4s ease;}
+@keyframes shake{
+  0%{transform:translateX(0);}
+  25%{transform:translateX(-8px);}
+  50%{transform:translateX(8px);}
+  75%{transform:translateX(-6px);}
+  100%{transform:translateX(0);}
+}
+
+.slideDown{
+  animation:slideDown .6s ease forwards;
+}
+
+@keyframes slideDown{
+  from{
+    opacity:0;
+    transform:translateY(-25px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* Step2 Hidden by Default */
+#step2{
+  display:none;
+  margin-top:25px;
+}
+
+footer{
+  text-align:center;
+  padding:16px;
+  margin-top:auto;
+  font-size:14px;
+  color:#777;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <a href="https://www.bilecik.edu.tr/tip" target="_blank">
+    <img src="IMG_2383.jpeg">
+  </a>
+
+  <h1>Tıp Fakültesi</h1>
+
+  <a href="https://www.bilecik.edu.tr/" target="_blank">
+    <img src="IMG_2388.png">
+  </a>
+</header>
+
+<div id="main">
+
+  <div class="title">Belge Doğrulama</div>
+
+  <!-- STEP1 -->
+  <div id="step1">
+
+    <label>*Barkod Numarası</label>
+
+    <div class="input-box">
+      <input id="barcode">
+      <div class="underline"></div>
+    </div>
+
+    <button onclick="checkBarcode()">Devam Et</button>
+
+    <div id="err1" class="error">Geçersiz barkod numarası!</div>
+
+  </div>
+
+  <!-- STEP2 (hidden under step1) -->
+  <div id="step2">
+
+    <label>Öğrenci No</label>
+
+    <div class="input-box">
+      <input id="student">
+      <div class="underline"></div>
+    </div>
+
+    <button onclick="checkStudent()">Devam Et</button>
+
+    <div id="err2" class="error">Öğrenci numarası hatalı!</div>
+
+  </div>
+
+</div>
+
+<footer>
+  © Bilecik Şeyh Edebali Üniversitesi | Öğrenci İşleri Daire Başkanlığı
+</footer>
+
+  <script>
+
+  const BARCODE = "YOKTRA9HHCZBSCYNQF";
+  const STUDENT = "99450604074";
+
+  /********** STEP 1 **********/
+  function checkBarcode(){
+    let v = barcode.value.trim();
+
+    if(v !== BARCODE){
+      err1.style.display="block";
+      step1.classList.add("shake");
+      setTimeout(()=>step1.classList.remove("shake"),400);
+      return;
+    }
+
+    err1.style.display="none";
+
+    // ✅ إخفاء زر Devam Et الخاص بمربع الباركود
+    document.querySelector("#step1 button").style.display = "none";
+
+    // ✅ إظهار مربع öğrenci no مع الأنيميشن الفاخر
+    step2.style.display="block";
+    step2.classList.add("revealBox","glowPulse");
+  }
+
+  /********** STEP 2 **********/
+  function checkStudent(){
+    let v = student.value.trim();
+
+    if(v !== STUDENT){
+      err2.style.display="block";
+      step2.classList.add("shake");
+      setTimeout(()=>step2.classList.remove("shake"),400);
+      return;
+    }
+
+    err2.style.display="none";
+
+    // ✅ الانتقال للريزلت
+    window.location.href =
+      "result.html?ogrno=99450604074&name=MOHAMED%20GOMAA%20RASHED%20ELWARAKY";
+  }
+
+  </script>
+
+</body>
+</html>
